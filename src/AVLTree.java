@@ -1,15 +1,24 @@
 package src;
-
+/**
+ * 
+ * AVLTree implementation. 
+ * A self balencing binary search tree used as a dictionary, mapping words to definitions
+ */
 public class AVLTree {
 
     public static class AVLNode {
-        String word;
+        String word; //key
         String definition;
         int height;
-        AVLNode left;
-        AVLNode right;
+        AVLNode left; //left child reference
+        AVLNode right; //right child reference
     
 
+        /**
+         * construct a new leaf node with a height of 1
+         * @param word
+         * @param definition
+         */
     public  AVLNode(String word, String definition) {
         this.word = word;
         this.definition = definition;
@@ -64,6 +73,17 @@ public int max(int a, int b) {
     return result;
 }
 
+/**
+ * preform right rotation to rebalance a left-heavy subtree
+ * @param y
+ * @return
+ * 
+ *                  y                         x
+ *                 / \                       / \
+ *               x    T3     ----->         T1  y
+ *              / \                            / \
+ *             T1  T2                         T2 T3
+ */
 private AVLNode rotateRight(AVLNode y) {
 if(y==null||y.left ==null) {
     return y;
@@ -80,6 +100,12 @@ x.height = max(getHeight(x.left), getHeight(x.right)) +1;
 return x;
 }
 
+/**
+ * preform left rotation to balance a right heavy subtree
+ * @param x
+ * @return
+ * 
+ */
 private AVLNode rotateLeft(AVLNode x) {
     if(x==null||x.right ==null) {
     return x;
@@ -96,26 +122,44 @@ x.height = max(getHeight(x.left), getHeight(x.right)) +1;
 return y;
 }
 
+/**
+ * insert a word and its definition into the AVL tree
+ * puts the word to lowercase and trims whitespce before insertion
+ * @param word
+ * @param definition
+ */
 public void insert(String word, String definition) {
     root = insertRec(root, word.toLowerCase().trim(), definition);
 }
 
+/**
+ * insert recursivley 
+ * @param node
+ * @param word
+ * @param definition
+ * @return
+ */
 private AVLNode insertRec(AVLNode node, String word, String definition) {
     if(node == null) {
         wordCount++;
         return new AVLNode(word, definition);
     }
     int cmp = word.compareTo(node.word);
+
+    //comes after alphabetically
      if(cmp >0) {
         node.right = insertRec(node.right, word, definition);
     }
+    //comes before alphabetically
     else if(cmp <0) {
         node.left = insertRec(node.left, word, definition);
     }
+    //exact duplicate
     else {
         node.definition = definition;
          return node;
     }
+    //update tree height
    node.height = 1+ max(getHeight(node.left), getHeight(node.right));
    int balance = getBalance(node);
     
@@ -144,6 +188,11 @@ private AVLNode insertRec(AVLNode node, String word, String definition) {
    return node;
 }
 
+/**
+ * searches for a word in the AVL tree iteratively
+ * @param query the word to look up
+ * @return
+ */
 public SearchResult search(String query) {
     String target = query.toLowerCase().trim();
     AVLNode curr = root;
@@ -151,15 +200,15 @@ public SearchResult search(String query) {
 
     while(curr!=null) {
         steps++;
-        int cmp = target.compareTo(curr.word);
+        int cmp = target.compareTo(curr.word); //comparison
         if(cmp == 0) {
             return new SearchResult(true, curr.definition, steps);
         }
         else if(cmp <0) {
-            curr = curr.left;
+            curr = curr.left; //search left subtree
         }
         else {
-            curr = curr.right;
+            curr = curr.right; //search right subtree
         }
     }
     return new SearchResult(false, null, steps);

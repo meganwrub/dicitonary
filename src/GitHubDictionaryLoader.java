@@ -1,3 +1,9 @@
+/**
+ * Loads dictionary dataset entries from GitHub CSV/text URL
+ * Parses lines containing word-definition pairs into a singly linked list in O(1) time 
+ * for insertion 
+ */
+
 package src;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -5,12 +11,16 @@ import java.net.URI;
 import java.net.URL;
 
 public class GitHubDictionaryLoader implements DictionaryLoader {
-    private String rawURL;
+    private final String rawURL;
 
     public GitHubDictionaryLoader(String rawURL) {
         this.rawURL = rawURL;
     }
-
+/**
+ * Downloads and parses dictionary data from the URL into a linked list
+ * Supports standard delimited lines (Comma,tab,colon) as well as CSV formats
+ * All parsed words are normalized to lower case
+ */
     @Override
     public EntryNode loadData() {
         EntryNode head = null;
@@ -43,7 +53,6 @@ public class GitHubDictionaryLoader implements DictionaryLoader {
                             }
                         }
                     } else {
-                        // Standard delimiters: tab, colon, or comma
                         int splitIndex = line.indexOf('\t');
                         if (splitIndex == -1) splitIndex = line.indexOf(':');
                         if (splitIndex == -1) splitIndex = line.indexOf(',');
@@ -79,7 +88,7 @@ public class GitHubDictionaryLoader implements DictionaryLoader {
         }
 
         catch(Exception e) {
-            System.out.println("failed to load dictionary from Github" + e.getMessage());
+            System.err.println("Failed to load dictionary: " + e.getMessage());
         }
         return head;
     }
