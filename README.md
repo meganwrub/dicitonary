@@ -10,8 +10,8 @@ complexity for all lookups and insertions
 -Allows users to add new words to the dictionary or update current definitions for existing words
 -Easy to swap data sources
 
-Classes:
--Main: Handles user interaction through command line interface menu
+** Classes:
+-Main: Handles user interaction through a command-line interface menu
 
 -DictionaryLogic: Acts as the controller coordinating the loader and the tree
 
