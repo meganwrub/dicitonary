@@ -12,8 +12,13 @@ complexity for all lookups and insertions
 
 Classes:
 -Main: Handles user interaction through command line interface menu
+
 -DictionaryLogic: Acts as the controller coordinating the loader and the tree
+
 -DictionaryLoader: An interface that sets up the required method for loading dictionary data
+
 -GitHubDictionaryLoader: Downloads remote dataset from GitHub and builds a singly linked list
+
 -EntryNode: A simple node that holds a word and its definition and a link to the next word in the list
+
 -AVLTree: The self-balancing binary search tree structure storing and balancing words
